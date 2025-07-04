@@ -1,5 +1,5 @@
 
-# DieLiebe: A CryptograΦc Algorithm Combining Prime Factorization, Bit Manipulation, and Modular Arithmetic
+# DieLiebe: A Cryptographic Algorithm Combining Prime Factorization, Bit Manipulation, and Modular Arithmetic
 <p align="center">
   <img src="hstu_logo_.png" alt="HSTU Logo" width="250" height="300">
 </p>
@@ -48,10 +48,10 @@
 9. [Conclusion](#conclusion)
 
 ## Overview
-DieLiebe is a cryptograΦc algorithm that integrates **prime factorization**, **bit manipulation (XOR)**, and **modular arithmetic (number theory)** to provide a robust encryption-decryption system. This algorithm leverages the mathematical strength of prime numbers for key generation, bitwise XOR for encryption, and modular exponentiation for secure encryption and decryption. By using different keys for encryption and decryption, the algorithm ensures a higher level of security while maintaining effici...
+DieLiebe is a cryptographic algorithm that integrates **prime factorization**, **bit manipulation (XOR)**, and **modular arithmetic (number theory)** to provide a robust encryption-decryption system. This algorithm leverages the mathematical strength of prime numbers for key generation, bitwise XOR for encryption, and modular exponentiation for secure encryption and decryption. By using different keys for encryption and decryption, the algorithm ensures a higher level of security while maintaining effici...
 
 ## Introduction
-Cryptography plays a pivotal role in securing sensitive information in modern communication systems. DieLiebe is designed to offer a hybrid encryption scheme that uses well-established cryptograΦc techniques—**prime factorization**, **XOR encryption**, and **modular exponentiation**—to create a secure and efficient cryptograΦc solution. The use of **prime numbers** for key generation ensures strong encryption, while **XOR** adds an additional layer of security through bit-level manipulation. The algo...
+Cryptography plays a pivotal role in securing sensitive information in modern communication systems. DieLiebe is designed to offer a hybrid encryption scheme that uses well-established cryptographic techniques—**prime factorization**, **XOR encryption**, and **modular exponentiation**—to create a secure and efficient cryptographic solution. The use of **prime numbers** for key generation ensures strong encryption, while **XOR** adds an additional layer of security through bit-level manipulation. The algo...
 
 ## Encryption Process
 
@@ -112,40 +112,33 @@ flowchart TD
 ```python
 import random
 
-# Function to calculate the greatest common divisor (gcd)
 def gcd(a, b):
     while b != 0:
         a, b = b, a % b
     return a
 
-# Function to compute the modular inverse of a number
-def mod_inverse(e, Φ_n):
-    for d in range(2, Φ_n):
-        if (e * d) % Φ_n == 1:
+def mod_inverse(e, phi_n):
+    for d in range(2, phi_n):
+        if (e * d) % phi_n == 1:
             return d
     return -1
 
-# Function to find a coprime e
-def find_coprime(Φ_n):
-    for e in range(2, Φ_n):
-        if gcd(e, Φ_n) == 1:
+def find_coprime(phi_n):
+    for e in range(2, phi_n):
+        if gcd(e, phi_n) == 1:
             return e
     return -1
 
-# Function to generate small prX for simplicity
 def generate_large_prime():
-    prX = [3, 5, 7, 11, 13, 17, 19, 23, 29, 31]
-    return random.choice(prX)
+    primes = [3, 5, 7, 11, 13, 17, 19, 23, 29, 31]
+    return random.choice(primes)
 
-# Function to perform XOR encryption
 def xor_encrypt(plaintext, secretKey):
     return [ord(c) ^ secretKey for c in plaintext]
 
-# Function to perform XOR decryption
 def xor_decrypt(ciphertext, secretKey):
     return ''.join([chr(c ^ secretKey) for c in ciphertext])
 
-# Function to perform modular exponentiation (a^b mod m)
 def mod_exp(a, b, m):
     result = 1
     a = a % m
@@ -156,69 +149,53 @@ def mod_exp(a, b, m):
         b //= 2
     return result
 
-# Function to perform encryption using modular exponentiation and XOR
 def encrypt(plaintext, e, n, secretKey):
-    # Convert to numerical values first
     nums = [ord(c) for c in plaintext]
-
-    # Apply XOR
     xor_encrypted = [num ^ secretKey for num in nums]
-
-    # Then apply modular exponentiation using n as modulus
     encrypted = [mod_exp(num, e, n) for num in xor_encrypted]
     return encrypted
 
-# Function to perform decryption using modular exponentiation and XOR
 def decrypt(ciphertext, d, n, secretKey):
-    # First apply modular exponentiation with private key
     decrypted_nums = [mod_exp(num, d, n) for num in ciphertext]
-
-    # Then apply XOR
     decrypted = [num ^ secretKey for num in decrypted_nums]
-
-    # Convert back to characters
     return ''.join([chr(num) for num in decrypted])
 
 def main():
-    # Generate larger prX to ensure n > 255
     p = generate_large_prime()
     q = generate_large_prime()
     while p * q <= 255:
         p = generate_large_prime()
         q = generate_large_prime()
-
+    
     n = p * q
-    Φ_n = (p - 1) * (q - 1)
+    phi_n = (p - 1) * (q - 1)
 
-    e = find_coprime(Φ_n)
-    d = mod_inverse(e, Φ_n)
+    e = find_coprime(phi_n)
+    d = mod_inverse(e, phi_n)
 
     if e == -1 or d == -1:
         print("Key generation failed!")
         return
 
     plaintext = "HeavenTurnedHell"
-    secretKey = 123  # Same key for encryption and decryption
+    secretKey = 123
 
     print("Original Message:", plaintext)
 
-    # Encryption
     ciphertext = encrypt(plaintext, e, n, secretKey)
     print("Encrypted Message (as integers):", ciphertext)
 
-    # Decryption
     decrypted_text = decrypt(ciphertext, d, n, secretKey)
     print("Decrypted Message:", decrypted_text)
 
-    # Verification
     if decrypted_text == plaintext:
         print("Success! Decryption matches original.")
     else:
         print("Decryption failed! Possible issues:")
         print("1. Modulus n is too small (must be > 255)")
-        print("2. Generated prX are too small")
+        print("2. Generated primes are too small")
         print(f"Current n: {n} (should be >255)")
-        print(f"PrX used: p={p}, q={q}")
+        print(f"Primes used: p={p}, q={q}")
 
 main()
 ```
@@ -281,10 +258,10 @@ Let’s use **"HeavenTurnedHell"** as our test message.
 | [Encrypted Value] | [Decrypted Value]                        | [XORed Value]                   | l         |
 
 ## Benefits of the Algorithm
-1. **Strong Security**: The use of prime numbers and modular exponentiation provides robust cryptograΦc security. The additional XOR layer adds another level of encryption, making it more resistant to attacks.
+1. **Strong Security**: The use of prime numbers and modular exponentiation provides robust cryptographic security. The additional XOR layer adds another level of encryption, making it more resistant to attacks.
 2. **Flexibility**: DieLiebe uses two different secret keys (for encryption and decryption), offering better security against known-plaintext attacks.
 3. **Efficiency**: The algorithm is computationally efficient, with modular exponentiation ensuring fast encryption and decryption even for large ciphertexts.
-4. **Simple to Implement**: The cryptograΦc techniques used—prime factorization, XOR, and modular arithmetic—are well-understood, making the algorithm easy to implement.
+4. **Simple to Implement**: The cryptographic techniques used—prime factorization, XOR, and modular arithmetic—are well-understood, making the algorithm easy to implement.
 
 ## Future Improvement Scopes
 1. **Larger Prime Numbers**: To enhance security, much larger prime numbers should be used, increasing the size of the public and private keys.
@@ -293,4 +270,4 @@ Let’s use **"HeavenTurnedHell"** as our test message.
 4. **Key Exchange Protocol**: Incorporate a secure key exchange protocol, such as Diffie-Hellman, to securely exchange the encryption keys without exposing them to eavesdropping.
 
 ## Conclusion
-DieLiebe effectively combines **prime factorization**, **bit manipulation (XOR)**, and **modular exponentiation** to create a cryptograΦc algorithm that is both secure and efficient. The algorithm offers strong encryption while being relatively simple to implement. By using different keys for encryption and decryption, it provides an extra layer of security. While it is robust, future improvements can be made to enhance scalability, security, and adaptability to new cryptograΦc challenges.
+DieLiebe effectively combines **prime factorization**, **bit manipulation (XOR)**, and **modular exponentiation** to create a cryptographic algorithm that is both secure and efficient. The algorithm offers strong encryption while being relatively simple to implement. By using different keys for encryption and decryption, it provides an extra layer of security. While it is robust, future improvements can be made to enhance scalability, security, and adaptability to new cryptograΦc challenges.
